@@ -2,15 +2,13 @@ import Koa from "koa"
 import bodyParser from "koa-bodyparser"
 import cors from '@koa/cors'
 import Router from "koa-router"
-import  { config }  from "../config"
+import env from './env'
 import { resolve } from 'path'
 import { Server } from 'http'
 import {bootstrapControllers} from "amala"
-import healthcheck from "../routes/healthcheck"
 
 const app = new Koa()
 
-const PORT = config.port
 
 export default async function () {
     const router = new Router()
@@ -24,13 +22,12 @@ export default async function () {
     app.use(cors({ origin: '*' }))
     app.use(bodyParser())
     app.use(router.routes())
-    app.use(healthcheck.routes())
     app.use(router.allowedMethods())
     return new Promise<Server>((resolve, reject) => {
         const connection = app
-        .listen(PORT)
+        .listen(env.PORT)
         .on('listening', () => {
-            console.log(`HTTP is listening on ${PORT}`)
+            console.log(`HTTP is listening on ${env.PORT}`)
             resolve(connection)
         })
         .on('error', reject)
