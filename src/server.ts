@@ -6,5 +6,4 @@ void (async () => {
     await runMongo()
     console.log('Mongo connected')
     await runApp()
-    console.log('App running')
 })()
